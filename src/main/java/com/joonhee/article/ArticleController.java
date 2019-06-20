@@ -18,7 +18,8 @@ public class ArticleController {
 
 	@Autowired
 	ArticleDao articleDao;
-
+	
+	static final Logger logger = LogManager.getLogger();
 	/**
 	 * 글 목록
 	 */
@@ -83,20 +84,18 @@ public class ArticleController {
 }
 	
 	
-	
-	@GetMapping("/article/delete")
-	public String articleDelete(@RequestParam("articleId") String articleId, @SessionAttribute("MEMBER") Member member) {
-		Article article = articleDao.getArticle(articleId);
-		if (!article.getUserId().equals(member.getMemberId())) {
-			return "article/faildelete";
-		}
-		articleDao.deleteArticle(articleId);
-		return "article/delete";
-	}
-	
+	@GetMapping("/article/s/delete")
+	public String delete(@RequestParam("articleId") String articleId,
+			@SessionAttribute("MEMBER") Member member) {
+		int updatedRows = articleDao.deleteArticle(articleId,
+				member.getMemberId());
 
-	@GetMapping("/article/faildelete")
-	public String failDelete() {
-		return "article/faildelete";
-	}
+		// 권한 체크 : 글이 삭제되었는지 확인
+		if (updatedRows == 0)
+			// 글이 삭제되지 않음. 자신이 쓴 글이 아님
+			throw new RuntimeException("No Authority!");
+
+		logger.debug("글을 삭제했습니다. articleId={}", articleId);
+		return "redirect:/app/article/list";
+}
 }
