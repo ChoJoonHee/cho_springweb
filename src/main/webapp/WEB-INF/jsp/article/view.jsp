@@ -20,6 +20,13 @@
 	<hr />
 	<p>${article.contentHtml }</p>
 	<hr />
+	<c:if test="${!empty sessionScope.MEMBER }"> 
+ 		
+ 			<a href="./app/article/updateForm?articleId=${article.articleId }">update</a>
+	       <a href="./app/article/delete?articleId=${article.articleId }">delete</a>
+ 	
+ 	</c:if> 
+
 </body>
 </html>
 
