@@ -84,7 +84,7 @@ public class ArticleController {
 }
 	
 	
-	@GetMapping("/article/s/delete")
+	@GetMapping("/article/delete")
 	public String delete(@RequestParam("articleId") String articleId,
 			@SessionAttribute("MEMBER") Member member) {
 		int updatedRows = articleDao.deleteArticle(articleId,
